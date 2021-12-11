@@ -85,6 +85,8 @@
                           octopodes*
                           (into flashed to-flash)
                           (+ flashes (count to-flash))))
+                 ;; If no more octopodes can flash this step, zero out
+                 ;; the ones that did and move on.
                  (recur step
                         [:wrap-up]
                         (reduce (fn [m [r c]] (assoc-in m [r c] 0))
@@ -95,8 +97,7 @@
 
                [:wrap-up]
                ;; Terminate if the termination criteria have been met,
-               ;; otherwise zero out any octopodes that flashed this
-               ;; step and go on to the next step.
+               ;; otherwise go on to the next step.
                (if (or (= step MAX_RECURSION_DEPTH)
                        (every? zero? (apply concat octopodes)))
                  {:step step
